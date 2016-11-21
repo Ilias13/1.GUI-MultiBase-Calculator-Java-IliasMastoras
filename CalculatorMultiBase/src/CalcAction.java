@@ -14,8 +14,8 @@ public class CalcAction implements ActionListener{
  private String number ="0", operand = null, totalText="", historyText = "";
  private ArrayList<String> myNumbers = new ArrayList <String>();
  private ArrayList<String> compHistory = new  ArrayList <String>();
- 
- boolean operandPressed = true, numPressed = false;
+ int pass = 0;
+ boolean operandPressed = true, numPressed = false, cont = false;
  
 	public CalcAction(){
 		
@@ -54,7 +54,37 @@ public class CalcAction implements ActionListener{
  	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+	    
 	 	JButton source = (JButton) e.getSource();
+	 	if( pass == 1){
+	 	  if(source.equals(panel.plus) || source.equals(panel.minus) || source.equals(panel.multiply) || source.equals(panel.divide)){
+	 	    // cont = false;
+	 	     pass = 0;
+	 	       if(source.equals(panel.plus)){
+	 		     operand="+";
+	 		     totalText += "+";
+			   }
+			   if(source.equals(panel.minus)){
+		 		     operand="-";
+		 		     totalText += "-";
+				}
+			   if(source.equals(panel.multiply)){
+		 		     operand="*";
+		 		     totalText += "*";
+				}  
+			   if(source.equals(panel.divide)){
+		 		     operand="/";
+		 		     totalText += "/";
+				}  
+		 	  panel.text.setText(totalText);
+		      myNumbers.add(operand); 
+	 	  } else {
+	 	    totalText = "";
+	 	    pass = 0;
+	 	   // cont = false;
+	 	    myNumbers.remove(myNumbers.get(0));
+	 	  }
+	 	}
 	 	 if(panel.changed){
 	 		   totalText = "";
 		 	   panel.text.setText(totalText);
@@ -305,12 +335,10 @@ public class CalcAction implements ActionListener{
 	 	
 	 	 }
 	 	
+	 	 
 	 	if(source.equals(panel.equal)){
-	       if(totalText.length() > 2){
-	 		 if(totalText.length()>16){
-	           panel.text.setFont(new Font("Arial",Font.BOLD,14));
-	           panel.add(new JTextField(16));
-	           
+	 	  if(numPressed == true){
+	 		if(totalText.length()>16){
 	           JFrame f = new JFrame("Error");
 	           JLabel l = new JLabel("USE SMALLER NUMBERS");
 	           l.setHorizontalAlignment(JTextField.CENTER);
@@ -327,37 +355,38 @@ public class CalcAction implements ActionListener{
 			   myNumbers.clear();
 			   operandPressed = true;
 		       numPressed = false;
-	         } else {
-	            operand = "=";
-		     
-		        myNumbers.add(number);
-		        myNumbers.add(operand);
-		        number = "0";
-		        operand = "";
-		       
-		     
-		       for(String i : myNumbers){
-		    	  historyText += i;
-		       }
-	 		
-		       String result = doComputations(myNumbers);
+	        } else {   
+	           operand = "=";
+			   myNumbers.add(number);
+			   myNumbers.add(operand);
+		       number = "0";
+		       operand = "";
 		      
-		       historyText +=  result +"   Base " +panel.slider.getValue();
-		       panel.text.setText(result);
+		         for(String i : myNumbers){
+		    	   historyText += i;
+		         }
+	 		
+		         String result = doComputations(myNumbers);
+		      
+		         historyText +=  result +"   Base " +panel.slider.getValue();
+		         panel.text.setText(result);
 		     
-		       totalText = "";
-		       myNumbers.clear();
-		        
-		        
-		        operandPressed = true;
-			    numPressed = false;
-		       if(compHistory.size() == 10){
-		    	 compHistory.remove(0);
-		       }
-		       compHistory.add(historyText);
-		       historyText = "";
-	    }
+		         totalText = result;
+		         //cont = true;
+		         pass = 1;
+		         myNumbers.clear();
+		         myNumbers.add(result);
+		         
+		         operandPressed = true;
+			     numPressed = false;
+		          if(compHistory.size() == 10){
+		    	   compHistory.remove(0);
+		          }
+		         compHistory.add(historyText);
+		         historyText = "";
+		       } 
 	       }
+	    
 	 	}
 	 		
 	 	if(source.equals(panel.history)){
@@ -372,7 +401,7 @@ public class CalcAction implements ActionListener{
 	 	}		
 	 		
 	 		
-		
+	 	
 	 		
 	 		
 	 }// end of operandPressed
