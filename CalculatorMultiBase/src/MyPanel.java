@@ -2,9 +2,18 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
+/**
+ * Creates a BorderLayout panel with basic calculator appearance.
+ * Implements ChangeListener and the JSlider component 
+ * listens to the changes. 
+ * @author Ilias Mastoras
+ *
+ */
 public class MyPanel extends JPanel implements ChangeListener{
 
+	private static final long serialVersionUID = 1L;
+
+	// Declaration of the necessary instance variables.
 	public JButton  one,two,three,four,five,
 	                six,seven,eight,nine,zero,
 	                alpha,beta,gama,delta,epsilon,
@@ -12,32 +21,31 @@ public class MyPanel extends JPanel implements ChangeListener{
 	                clear,equal,history;
 	
 	public JSlider slider;
-	public JTextField text;
+	public JTextField text; 
 	public JPanel basePanel,sNlPanel,numPanel,textLabelPanel;
-	public JFrame historyFrame;
+	public JFrame historyFrame; // frame for the computation history
 	public JLabel historyLabel;
 	public JTextArea textArea;
-	public int previousPos;
-	public boolean changed;	
+	public boolean changed;	//checks if the slider's position has changed
 	
+	/**
+	 * MyPanel constructor.
+	 * Initialization of the variables and arrangement 
+	 * of the components. All the JButtons are added and
+	 * the JSlider listens to ChangeEvent.   
+	 */
 	public MyPanel(){
-	
-     		
 		Font f = new Font("Arial",Font.BOLD,23);
-		 text = new JTextField(16);
-		 
-		       
-		       
-		 
-		 text.setFont(f);
-		 text.setBackground(Color.white);
+		text = new JTextField(16);
+	    text.setFont(f);
+		text.setBackground(Color.white);
 		// text.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		 text.setEditable(false); 
-		 textLabelPanel = new JPanel();
-		 history = new JButton("History");
+		text.setEditable(false); 
+		textLabelPanel = new JPanel();
+		history = new JButton("History");
 		
-		 textLabelPanel.add(history);
-		 textLabelPanel.add(text);
+		textLabelPanel.add(history);
+		textLabelPanel.add(text);
 		 
 		 
 		one = new JButton("1"); two = new JButton("2"); three = new JButton("3"); 
@@ -55,23 +63,21 @@ public class MyPanel extends JPanel implements ChangeListener{
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
         slider.addChangeListener(this);
-        
-        //previousPos = slider.getValue();
-        
+       
         sNlPanel = new JPanel(new BorderLayout());
         sNlPanel.add(new JLabel("  BASE"),BorderLayout.NORTH);
         sNlPanel.add(slider,BorderLayout.WEST);
          
         numPanel = new JPanel(new GridLayout(6,4));
          
-       numPanel.add(seven);   numPanel.add(eight);        numPanel.add(nine); 
-       numPanel.add(divide);  numPanel.add(four);         numPanel.add(five); 
-       numPanel.add(six);     numPanel.add(multiply);     numPanel.add(one);
-       numPanel.add(two);     numPanel.add(three);        numPanel.add(plus);
-       numPanel.add(clear);   numPanel.add(zero);         numPanel.add(equal);
-       numPanel.add(minus);   numPanel.add(alpha);        numPanel.add(beta);
-       numPanel.add(gama);    numPanel.add(new JLabel()); numPanel.add(delta);
-       numPanel.add(epsilon); numPanel.add(ef);           numPanel.add(new JLabel());
+        numPanel.add(seven);   numPanel.add(eight);        numPanel.add(nine); 
+        numPanel.add(divide);  numPanel.add(four);         numPanel.add(five); 
+        numPanel.add(six);     numPanel.add(multiply);     numPanel.add(one);
+        numPanel.add(two);     numPanel.add(three);        numPanel.add(plus);
+        numPanel.add(clear);   numPanel.add(zero);         numPanel.add(equal);
+        numPanel.add(minus);   numPanel.add(alpha);        numPanel.add(beta);
+        numPanel.add(gama);    numPanel.add(new JLabel()); numPanel.add(delta);
+        numPanel.add(epsilon); numPanel.add(ef);           numPanel.add(new JLabel());
          
         historyLabel = new JLabel();
 	    historyLabel.setFont(f);
@@ -87,19 +93,22 @@ public class MyPanel extends JPanel implements ChangeListener{
    	    textArea.setEditable(false);
    	    historyFrame.add(textArea, BorderLayout.CENTER);
    	    
-         
-         this.setLayout(new BorderLayout());
-         this.add(sNlPanel,BorderLayout.WEST);
-         this.add(textLabelPanel,BorderLayout.NORTH);
-         this.add(numPanel,BorderLayout.CENTER);
-      
+        this.setLayout(new BorderLayout());
+        this.add(sNlPanel,BorderLayout.WEST);
+        this.add(textLabelPanel,BorderLayout.NORTH);
+        this.add(numPanel,BorderLayout.CENTER);  
 	}
 
-
+   /**
+    * stateChanged override method.
+    * Removes all the JButtons and repaints with
+    * the appropriate JButtons, depending on the
+    * JSlider's value. Sets changed = true.
+    */
 	
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		 changed = true;
+		changed = true;
 		if(slider.getValue() == 2){ 
 		    numPanel.removeAll();
 			numPanel.add(plus); numPanel.add(clear);numPanel.add(zero);
