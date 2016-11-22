@@ -9,11 +9,13 @@ The following code evaluates a String expression a returns the arithmetic result
 
 
  ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
- try {
-	      x = engine.eval(input);
+
+ try { 
+          x = engine.eval(input);
      } catch (ScriptException e) {
-	      e.printStackTrace();
-	   }
+          e.printStackTrace();   
+     }  
+	  
      
      
      
